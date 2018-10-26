@@ -48,3 +48,31 @@ count=$(echo "$funcs" | jq '. | length')
 
 echo "We have $count Lambda Functions"
 echo "$funcs"
+
+echo ""
+echo " API Gateway"
+echo "============="
+gateways=$(aws apigateway get-domain-names --query "items[][domainName][]")
+count=$(echo "$gateways" | jq '. | length')
+
+echo "We have $count API Gateways"
+echo "$gateways"
+
+echo ""
+echo " Route 53"
+echo "=========="
+zones=$(aws route53 list-hosted-zones --query "HostedZones[][Id, Name]")
+count=$(echo "$zones" | jq '. | length')
+
+echo "We have $count Hosted Zones (Route 53)"
+echo "$zones"
+
+echo ""
+echo " AMI Images"
+echo "============"
+
+images=$(aws ec2 describe-images --owner $(aws sts get-caller-identity --query "Account" --output text) --query "Images[][ImageId][]")
+count=$(echo "$images" | jq '. | length')
+
+echo "We have $count AMI images"
+echo $images
